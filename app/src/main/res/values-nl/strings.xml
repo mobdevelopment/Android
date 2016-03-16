@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_listening">Selectieve luistertest</string>
+    <string name="title_activity_instrument">Instrumententest</string>
+
+    <string name="pref_listening_pause_time_title">Tijd tussen letters/cijfers</string>
+    <string-array name="pref_listening_pause_time_titles">
+        <item>0.25 Seconden</item>
+        <item>0.50 Seconden</item>
+        <item>0.75 Seconden</item>
+        <item>1.00 Seconden</item>
+        <item>1.25 Seconden</item>
+        <item>1.50 Seconden</item>
+    </string-array>
+
+    <string name="pref_listening_lang_title">Taal</string>
+    <string-array name="pref_listening_lang_titles">
+        <item>Engels</item>
+        <item>Nederlands</item>
+    </string-array>
+</resources>

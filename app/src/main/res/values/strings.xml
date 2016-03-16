@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">Vliegertest</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Settings for Listening Test -->
+    <string name="pref_listening_pause_time_title">Time between numbers/letters</string>
+    <string-array name="pref_listening_pause_time_titles">
+        <item>0.25 sec</item>
+        <item>0.50 sec</item>
+        <item>0.75 sec</item>
+        <item>1.00 sec</item>
+        <item>1.25 sec</item>
+        <item>1.50 sec</item>
+    </string-array>
+    <string-array name="pref_listening_pause_time_values">
+        <item>250</item>
+        <item>500</item>
+        <item>750</item>
+        <item>1000</item>
+        <item>1250</item>
+        <item>1500</item>
+    </string-array>
+
+    <string name="pref_listening_lang_title">Language</string>
+    <string-array name="pref_listening_lang_titles">
+        <item>English</item>
+        <item>Dutch</item>
+    </string-array>
+    <string-array name="pref_listening_lang_values">
+        <item>en</item>
+        <item>nl</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_listening">Selective listening test</string>
+    <string name="large_text">
+        "Hoe werkt de selectieve luistertest?\n\n"
+
+        "De selectieve luistertest is bedoeld om te achterhalen de belangrijke details kan filteren."
+        "In tegenstelling tot school, moet je hier je info uit meerdere kanalen halen,"
+        "je krijg er namelijk twee te horen, net zoals een echte vlieger.\n"
+        "Een vlieger staat in direct contact tot zowel de luchtverkeerstoren als de luchtgevechtsleider."
+        "Eenzelfde simuleren we in deze test, je hoort zo dadelijk links en rechts letters en cijfers."
+        "Aan jou de taak de cijfers eruit te filteren.\n De test wordt echter bemoeilijk doordat links"
+        "en rechts verschillen. Aan het begin van de test hoor je een hoge of lage toon, dit kan zowel"
+        "links als rechts zijn, maar dit is verder irrelevant, de toonhoogte des te meer.\n"
+        "is het een hoge toon dat moet links luisteren en is het een lage toon moet je rechts luisteren.\n\n"
+
+        "Hoe werkt de score?\n\n"
+
+        "De test bestaat uit 24 setjes van 5 tot 8 cijfers die je moet filteren. Per set mag je ongelimiteerd"
+        "fouten maken, alleen de eerste fout telt mee. In totaal mogen 6 setjes fout gaan.\n"
+        "Heb je de test al eens gedaan?, in dat geval mag je er nog maar 2 fout doen."
+        "Dit is omdat er vanuit gegaan wordt dat in je de tussentijd beter bent geworden en omdat "
+        "je al bekend ben geworden met de test.\n\n"
+    </string>
+    <string name="title_activity_instrument">Instruments Test</string>
+    <string name="title_scores_list">Games</string>
+    <string name="title_scores_detail">Scores Detail</string>
+</resources>
