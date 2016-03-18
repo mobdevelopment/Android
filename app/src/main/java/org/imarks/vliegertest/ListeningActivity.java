@@ -69,6 +69,39 @@ public class ListeningActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     * This method does nothing, it just describes the way the game is played
+     *
+     * @deprecated
+     */
+    private void description()
+    {
+        /**
+         * @statics
+         *
+         * r: number of rounds: 24
+         * n: amount of numbers: 5 - 8
+         * m: allowed mistakes: 6 - 2
+         * @TODO: suggestion, (m) is 6 in base, allow the user to set it to 2 to give correct feedback who failed already once in real life
+         *
+         * @text-description
+         * The player gets to play (r) in which he must response with numbers.
+         * each round start with a high or low tone, its defines to which side the user must listen
+         * on this side the user needs to filter the heard numbers from the letters while the other side still plays different letters or numbers
+         *
+         * the players responses by clicking the correct number. the player is allowed to change the order of answering from what's heard
+         * the goal of the test is only to test if the user can filter specific data. its thereby irrelevant to the order of answering
+         *
+         * @grading
+         * during a round infinite mistakes can be made, it still count as one mistake
+         * the total a allowed mistakes are depending if the user did the test before (in real life).
+         * the first official attempt allows 6 mistakes, the second and also last official attempt allows 2
+         *
+         * @optional
+         * - make (m) a setting to let the number of mistakes be bases on if he did the test before
+         */
+    }
+
     private void playTheGame(){
         round = 1;
 
@@ -85,9 +118,19 @@ public class ListeningActivity extends AppCompatActivity {
         int numbers = 0;
         scoreModified = false;
         reachedLimit = false;
+        // set array of playedNumbers
+        // set array of answered numbers
+
+        // pick a side
+        // define amount of numbers in this round
 
         while (isPlaying && !reachedLimit)
         {
+            // play a dual sound
+            // if number is played on side, add it to playedNumbers
+
+            // Add a construction to keep playing a few amount of dual sounds after completion
+            // Disable the numbers chance on the defined side while this is done
             numbers++;
 
             Double chance = Math.random();
@@ -100,6 +143,11 @@ public class ListeningActivity extends AppCompatActivity {
                 reachedLimit = true;
             }
         }
+
+        // Compare the array of played and answered numbers
+        // Note: order is inrelevant, only the content
+
+        // modify score if neccessary
 
         return;
     }
