@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionDropDownStyle">@style/AppTheme.PopupOverlay</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,7 +16,11 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/text</item>
+        <item name="android:background">@color/backgroundAlternative</item>
+        <item name="background">@color/backgroundAlternative</item>
+    </style>
 
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>

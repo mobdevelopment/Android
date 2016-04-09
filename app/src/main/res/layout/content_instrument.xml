@@ -9,7 +9,177 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.imarks.vliegertest.InstrumentActivity"
+    tools:context=".activity.InstrumentActivity"
     tools:showIn="@layout/activity_instrument">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:visibility="visible"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardBackgroundColor="@color/backgroundAlternative"
+        card_view:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/instrumentsCard"
+                android:layout_gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardBackgroundColor="@color/textAlternative">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/altitude"
+                        android:src="@drawable/altitude"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/compass"
+                        android:src="@drawable/compass"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/backgroundAlternative"
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/textAlternative">
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/image1"
+                            android:src="@drawable/a"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp"
+                            android:onClick="giveAnswer"
+                            android:tag="1"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true" />
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/textAlternative">
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/image2"
+                            android:src="@drawable/b"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp"
+                            android:onClick="giveAnswer"
+                            android:tag="2"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true" />
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/textAlternative">
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/image3"
+                            android:src="@drawable/c"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp"
+                            android:onClick="giveAnswer"
+                            android:tag="3"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter" />
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/textAlternative">
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/image4"
+                            android:src="@drawable/d"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp"
+                            android:onClick="giveAnswer"
+                            android:tag="4"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true" />
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
 
 </RelativeLayout>

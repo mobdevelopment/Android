@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#03212a</color>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorAccent">#edeff0</color>
+
+
+    <!--
     <color name="colorPrimary">#3fb53f</color>
     <color name="colorPrimaryDark">#329f30</color>
     <color name="colorAccent">#40ff43</color>
-
+    -->
     <color name="black_semi_transparent">#B2000000</color>
     <color name="half_black">#808080</color>
     <color name="white">#fafafa</color>
     <color name="white_pressed">#f1f1f1</color>
     <color name="red">#FF4081</color>
     <color name="red_pressed">#ff87b0</color>
+
+
+    <color name="background">#03212a</color>
+    <color name="backgroundAlternative">#edeff0</color>
+    <color name="text">#000</color>
+    <color name="textAlternative">#fff</color>
+    <color name="textHover">#fe6600</color>
+    <color name="label">#fe6600</color>
 </resources>

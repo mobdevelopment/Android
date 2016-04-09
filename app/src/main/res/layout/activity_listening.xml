@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.imarks.vliegertest.ListeningActivity">
+    android:background="@drawable/backgroundpattern"
+    tools:context=".activity.ListeningActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -29,6 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_media_play"/>
+        android:src="@android:drawable/ic_media_play"
+        android:textColor="@color/textAlternative"
+        app:backgroundTint="@color/colorPrimary"/>
 
 </android.support.design.widget.CoordinatorLayout>

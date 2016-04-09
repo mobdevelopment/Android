@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.imarks.vliegertest.DashboardActivity">
+    tools:context=".activity.DashboardActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         fab:fab_addButtonColorNormal="@color/colorPrimaryDark"
         fab:fab_addButtonColorPressed="@color/colorPrimary"
-        fab:fab_addButtonPlusIconColor="@color/half_black"
+        fab:fab_addButtonPlusIconColor="@color/textAlternative"
         fab:fab_labelStyle="@style/menu_labels_style"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.imarks.vliegertest.InstrumentActivity">
+    android:background="@drawable/backgroundpattern"
+    tools:context=".activity.InstrumentActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -24,12 +25,27 @@
     <include layout="@layout/content_instrument" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabprevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_media_previous"
+        android:textColor="@color/textAlternative"
+        app:backgroundTint="@color/colorPrimary"
+        android:adjustViewBounds="false"
+        android:onClick="previous"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabnext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"
-        android:adjustViewBounds="false" />
+        android:src="@android:drawable/ic_media_next"
+        android:textColor="@color/textAlternative"
+        app:backgroundTint="@color/colorPrimary"
+        android:adjustViewBounds="false"
+        android:onClick="next"/>
 
 </android.support.design.widget.CoordinatorLayout>
