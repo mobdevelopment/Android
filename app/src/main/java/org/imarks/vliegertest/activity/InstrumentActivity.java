@@ -56,7 +56,9 @@ public class InstrumentActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        apiClient.connect();
+        if (!apiClient.isConnected() && !apiClient.isConnecting()){
+            apiClient.connect();
+        }
 
         altitude    = (ImageView) findViewById(R.id.altitude);
         compass     = (ImageView) findViewById(R.id.compass);
@@ -113,8 +115,6 @@ public class InstrumentActivity extends AppCompatActivity {
         current = this.questions.get(0);
 
         changeImages(current);
-
-        Log.e("Questions", this.questions.toString());
     }
 
     public void giveAnswer(View v) {
@@ -132,6 +132,7 @@ public class InstrumentActivity extends AppCompatActivity {
 
     public void previous(View v) {
         int index = questions.indexOf(current);
+        Log.e("index", "" + index);
         if (index > 0){
             Question previous = questions.get(index - 1);
             changeImages(previous);
@@ -141,12 +142,11 @@ public class InstrumentActivity extends AppCompatActivity {
 
     public void next(View v) {
         int index = questions.indexOf(current);
-        if (index < questions.size() - 1){
-            if (current.answer > 0){
-                Question next = questions.get(index + 1);
-                changeImages(next);
-            }
-        } else {
+        Log.e("Navigation", "Index: " + index + " Size: " + questions.size());
+        if (index < questions.size() - 1 && current.answer > 0){
+            Question next = questions.get(index + 1);
+            changeImages(next);
+        } else if (current.answer > 0) {
             Finished();
         }
     }
@@ -161,10 +161,32 @@ public class InstrumentActivity extends AppCompatActivity {
 
         if (apiClient.isConnected()){
             Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, score);
+            Log.e("Leaderboards", "Added score");
+        } else {
+            final int fscore = score;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    apiClient.connect();
+                    while (apiClient.isConnecting()){
+                        // wait;
+                    }
+                    Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, fscore);
+                    Log.e("Leaderboards", "Added score");
+                }
+            }).start();
+
         }
     }
 
     private void changeImages(Question question){
+        current = question;
+
+        optionA.setColorFilter(null);
+        optionB.setColorFilter(null);
+        optionC.setColorFilter(null);
+        optionD.setColorFilter(null);
+
         new DownloadImageTask(altitude).execute(question.altitude.path);
         new DownloadImageTask(compass).execute(question.compass.path);
         new DownloadImageTask(optionA).execute(question.images.get(0).path);
@@ -222,8 +244,7 @@ public class InstrumentActivity extends AppCompatActivity {
 
                     GsonBuilder gsonBuilder = new GsonBuilder();
                     Gson gson = gsonBuilder.create();
-                    List<Question> questions = new ArrayList<>();
-                    questions = Arrays.asList(gson.fromJson(reader, Question[].class));
+                    List<Question> questions = Arrays.asList(gson.fromJson(reader, Question[].class));
 
                     handleQuestionsList(questions);
                 } catch (Exception e) {

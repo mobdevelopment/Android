@@ -47,7 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:id="@+id/altitude"
-                        android:src="@drawable/altitude"
+                        android:src="@drawable/ring"
                         android:scaleType="fitCenter"
                         android:adjustViewBounds="true" />
 
@@ -56,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:id="@+id/compass"
-                        android:src="@drawable/compass"
+                        android:src="@drawable/ring"
                         android:scaleType="fitCenter"
                         android:adjustViewBounds="true" />
 
@@ -89,7 +89,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/image1"
-                            android:src="@drawable/a"
+                            android:src="@drawable/ring"
                             android:background="@android:color/transparent"
                             android:padding="0dp"
                             android:onClick="giveAnswer"
@@ -112,7 +112,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/image2"
-                            android:src="@drawable/b"
+                            android:src="@drawable/ring"
                             android:background="@android:color/transparent"
                             android:padding="0dp"
                             android:onClick="giveAnswer"
@@ -142,7 +142,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/image3"
-                            android:src="@drawable/c"
+                            android:src="@drawable/ring"
                             android:background="@android:color/transparent"
                             android:padding="0dp"
                             android:onClick="giveAnswer"
@@ -165,7 +165,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/image4"
-                            android:src="@drawable/d"
+                            android:src="@drawable/ring"
                             android:background="@android:color/transparent"
                             android:padding="0dp"
                             android:onClick="giveAnswer"
