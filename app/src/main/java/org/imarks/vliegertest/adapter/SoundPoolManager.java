@@ -3,10 +3,12 @@ package org.imarks.vliegertest.adapter;
 import android.app.Activity;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.Log;
 
 import org.imarks.vliegertest.adapter.interfaces.ISoundPoolLoaded;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,7 @@ public class SoundPoolManager {
     private SoundPool soundPool;
     private List<Integer> sounds;
     private HashMap<Integer, SoundSampleEntity> hashMap;
-    private boolean isPlaySound;
+    private boolean isPlaySound = true;
 
     public synchronized static SoundPoolManager getInstance() {
         return instance;
@@ -43,7 +45,7 @@ public class SoundPoolManager {
         if (sounds == null || sounds.size() == 0) {
             throw new Exception("Sounds not set");
         }
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 100);
+        soundPool = new SoundPool(36, AudioManager.STREAM_MUSIC, 100);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId,
@@ -105,8 +107,13 @@ public class SoundPoolManager {
     public void playSound(int resourceId, float left, float right) {
         if (isPlaySound()) {
             SoundSampleEntity entity = hashMap.get(resourceId);
-            if (entity.getSampleId() > 0 && entity.isLoaded()) {
+            if (entity != null && entity.getSampleId() > 0 && entity.isLoaded()) {
                 soundPool.play(entity.getSampleId(), left, right, 1, 0, 1f);
+            } else {
+                Log.e("Audio", "Resource " + resourceId + " could not be played");
+                if (entity != null){
+                    Log.e("Audio", "IsLoaded: " + (entity.isLoaded() ? "True" : "False") + " sampleId " + entity.getSampleId());
+                }
             }
         }
     }

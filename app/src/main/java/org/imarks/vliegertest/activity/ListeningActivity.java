@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
@@ -164,20 +165,21 @@ public class ListeningActivity extends AppCompatActivity {
         a = 0;*/
     }
 
-    private int getRandomSound(boolean allowNumber){
+    private Pair<Integer, String> getRandomSound(boolean allowNumber){
         double d = Math.random();
         Resources res = getResources();
         int sound;
+        String choice;
 
         if (d < 0.2 && allowNumber) {
-            sound = res.getIdentifier(lang + randNumber(), "raw", getApplicationContext().getPackageName());
+            choice = "" + randNumber();
+            sound = res.getIdentifier(lang + Integer.parseInt(choice), "raw", getApplicationContext().getPackageName());
         } else {
-            // left letter
-            // right letter
-            sound = res.getIdentifier(randChar() + lang, "raw", getApplicationContext().getPackageName());
+            choice = "" + randChar();
+            sound = res.getIdentifier(choice + lang, "raw", getApplicationContext().getPackageName());
         }
 
-        return sound;
+        return new Pair<>(sound, choice);
     }
 
     private static boolean checkMistakeMade(List<Integer> played, List<Integer> heared) {
@@ -247,15 +249,17 @@ public class ListeningActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < alphabet.length() - 1; i++){
-            sounds.add(res.getIdentifier(lang + alphabet.charAt(i), "raw", getApplicationContext().getPackageName()));
+            sounds.add(res.getIdentifier(alphabet.charAt(i) + lang, "raw", getApplicationContext().getPackageName()));
         }
-        
+
+        //Log.e("Sounds", sounds.toString());
         soundPool.setSounds(sounds);
         try {
             soundPool.InitializeSoundPool(this, new ISoundPoolLoaded() {
                 @Override
                 public void onSuccess() {
-
+                    Toast.makeText(ListeningActivity.this, "Audio loaded", Toast.LENGTH_LONG);
+                    Log.e("SoundPool", "Audio loaded");
                 }
             });
         } catch (Exception e) {
@@ -344,8 +348,6 @@ public class ListeningActivity extends AppCompatActivity {
 
         private String leaderboardKey = "CgkIgozg9vQREAIQAQ";
 
-        volatile int a = 0;
-
         protected List<Integer> hearedNumbers = new ArrayList<>();
 
         public void submitAnswer(int number){
@@ -357,41 +359,42 @@ public class ListeningActivity extends AppCompatActivity {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-
+                    Random r = new Random();
                     List<Integer> playedNumbers = new ArrayList<>(); // the max amount of numbers is 8 so we should do fine
                     // set array of answered numbers
                     hearedNumbers = new ArrayList<>();
+                    int roundSize = r.nextInt((8 - 5) + 1) + 5; // Get a number in the range of 5 and 8 (inclusive)
+                    boolean isLeft = r.nextBoolean();
 
-                    while(a < 5){
+                    while(playedNumbers.size() < roundSize){
                         while (isPaused)
                             sleep(1);
 
-                        int soundLeft = getRandomSound(true);
-                        int soundRight = getRandomSound(true);
+                        Pair<Integer, String> leftSoundData = getRandomSound(true);
+                        Pair<Integer, String> rightSoundData = getRandomSound(true);
+                        int soundLeft = leftSoundData.first;
+                        int soundRight = rightSoundData.first;
+
+                        if (isLeft && Character.isDigit(leftSoundData.second.charAt(0))){
+                            hearedNumbers.add(Integer.parseInt(leftSoundData.second));
+                        } else if (!isLeft && Character.isDigit(rightSoundData.second.charAt(0))) {
+                            hearedNumbers.add(Integer.parseInt(leftSoundData.second));
+                        }
 
                         soundPool.playSound(soundLeft, .99f, .0f);
                         soundPool.playSound(soundRight, .0f, .99f);
+                        Log.e("Audio", "Left: " + soundLeft + " Right: " + soundRight);
 
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        a++;
+                        sleep((int) Integer.parseInt(settings.getString("listening_pause_time", "1000")));
                     }
 
                     Log.e("round", "answer time enabled");
-                    try {
-                        Thread.sleep(8000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    sleep(8000);
 
                     if (!checkMistakeMade(playedNumbers, hearedNumbers)){
                         score++;
                     }
                     Log.e("round", "ended round: " + round);
-                    a = 0;
                 }
             });
 
