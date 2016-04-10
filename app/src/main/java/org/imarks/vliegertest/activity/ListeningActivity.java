@@ -22,6 +22,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
 import org.imarks.vliegertest.R;
+import org.imarks.vliegertest.adapter.SoundPoolManager;
+import org.imarks.vliegertest.adapter.interfaces.ISoundPoolLoaded;
 import org.imarks.vliegertest.model.ApiClient;
 
 import java.io.IOException;
@@ -54,6 +56,8 @@ public class ListeningActivity extends AppCompatActivity {
 
     private volatile Game game = new Game();
 
+    private volatile SoundPoolManager soundPool;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +65,15 @@ public class ListeningActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SoundPoolManager.CreateInstance();
+        soundPool = SoundPoolManager.getInstance();
+        loadSounds(lang);
+
         cardView = (CardView) findViewById(R.id.inputCard);
 
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         lang = settings.getString("listening_lang", "en");
+
 
         final AtomicBoolean started = new AtomicBoolean(false);
 
@@ -74,7 +83,7 @@ public class ListeningActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!isPlaying) {
                     isPlaying = !isPlaying;
-                    if (started.get() == false){
+                    if (started.get() == false) {
                         started.set(true);
                         game.execute();
                     } else {
@@ -155,6 +164,22 @@ public class ListeningActivity extends AppCompatActivity {
         a = 0;*/
     }
 
+    private int getRandomSound(boolean allowNumber){
+        double d = Math.random();
+        Resources res = getResources();
+        int sound;
+
+        if (d < 0.2 && allowNumber) {
+            sound = res.getIdentifier(lang + randNumber(), "raw", getApplicationContext().getPackageName());
+        } else {
+            // left letter
+            // right letter
+            sound = res.getIdentifier(randChar() + lang, "raw", getApplicationContext().getPackageName());
+        }
+
+        return sound;
+    }
+
     private static boolean checkMistakeMade(List<Integer> played, List<Integer> heared) {
         if (played.size() != heared.size()){
             return false;
@@ -209,6 +234,33 @@ public class ListeningActivity extends AppCompatActivity {
         int number = r.nextInt(letters.length() - 1);
 
         return letters.charAt(number);
+    }
+
+    private void loadSounds(String lang){
+        String numbers = "0123456789";
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        List<Integer> sounds = new ArrayList<>();
+        Resources res = getResources();
+
+        for (int i = 0; i < numbers.length() - 1; i++){
+            sounds.add(res.getIdentifier(lang + numbers.charAt(i), "raw", getApplicationContext().getPackageName()));
+        }
+
+        for (int i = 0; i < alphabet.length() - 1; i++){
+            sounds.add(res.getIdentifier(lang + alphabet.charAt(i), "raw", getApplicationContext().getPackageName()));
+        }
+        
+        soundPool.setSounds(sounds);
+        try {
+            soundPool.InitializeSoundPool(this, new ISoundPoolLoaded() {
+                @Override
+                public void onSuccess() {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*******************************************
@@ -313,6 +365,12 @@ public class ListeningActivity extends AppCompatActivity {
                     while(a < 5){
                         while (isPaused)
                             sleep(1);
+
+                        int soundLeft = getRandomSound(true);
+                        int soundRight = getRandomSound(true);
+
+                        soundPool.playSound(soundLeft, .99f, .0f);
+                        soundPool.playSound(soundRight, .0f, .99f);
 
                         try {
                             Thread.sleep(1000);
