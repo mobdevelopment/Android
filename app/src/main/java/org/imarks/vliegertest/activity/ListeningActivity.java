@@ -25,8 +25,15 @@ import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.model.ApiClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ListeningActivity extends AppCompatActivity {
@@ -45,6 +52,8 @@ public class ListeningActivity extends AppCompatActivity {
 
     private int[] hearedNumbers;
 
+    private volatile Game game = new Game();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +66,24 @@ public class ListeningActivity extends AppCompatActivity {
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         lang = settings.getString("listening_lang", "en");
 
+        final AtomicBoolean started = new AtomicBoolean(false);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isPlaying) {
                     isPlaying = !isPlaying;
-                    startTheGame();
+                    if (started.get() == false){
+                        started.set(true);
+                        game.execute();
+                    } else {
+                        game.resume();
+                    }
                 } else {
                     isPlaying = !isPlaying;
-                    pauseTheGame();
+                    game.pause();
+
                 }
             }
         });
@@ -126,31 +143,26 @@ public class ListeningActivity extends AppCompatActivity {
     }
 
     private void playRound() {
-        //new Thread(new Runnable() {
-        //    @Override
-        //    public void run() {
-                int i = 0;
-                while (i < 2) {
-                    try {
-                        Thread.sleep(1000);
-                        i++;
-                        score++;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-        //    }
-        //}).start();
+        /*while(a < 5){
+            try {
+                wait(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            a++;
+        }
+        Log.e("loop", "started round: " + round);
+        a = 0;*/
     }
 
-    private static boolean checkMistakeMade(int[] played, int[] heared) {
-        if (played.length != heared.length){
+    private static boolean checkMistakeMade(List<Integer> played, List<Integer> heared) {
+        if (played.size() != heared.size()){
             return false;
         }
 
-        Arrays.sort(played);
-        Arrays.sort(heared);
-        return !Arrays.equals(played, heared); // If the array is the same no mistake is made, so revert the answer
+        Collections.sort(played);
+        Collections.sort(heared);
+        return !played.equals(heared); // If the array is the same no mistake is made, so revert the answer
     }
 
     private void playSoundLeft(int id){
@@ -175,9 +187,10 @@ public class ListeningActivity extends AppCompatActivity {
         });
     }
 
-    public void giveNumber(View view){
-        Object givenNumber = view.getTag();
-        Snackbar.make(view, "You answered with:" + givenNumber.toString(), Snackbar.LENGTH_LONG)
+    public void giveNumber(View v){
+        int givenNumber = Integer.parseInt(v.getTag().toString());
+        game.submitAnswer(givenNumber);
+        Snackbar.make(v, "You answered with:" + givenNumber, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
@@ -202,18 +215,17 @@ public class ListeningActivity extends AppCompatActivity {
      * Managing the game play/pause/stop state *
      *******************************************/
 
-    private void startTheGame() {
+    private void activateGameLayout(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         Drawable d = getResources().getDrawable(android.R.drawable.ic_media_pause);
         fab.setImageDrawable(d);
 
         CardView cardView = (CardView) findViewById(R.id.inputCard);
         cardView.setVisibility(View.VISIBLE);
-
-        playTheGame();
+        Log.e("LAYOUT", "Game layout enabled");
     }
 
-    private void pauseTheGame() {
+    private void deactivateGameLayout(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         Drawable d = getResources().getDrawable(android.R.drawable.ic_media_play);
         fab.setImageDrawable(d);
@@ -222,8 +234,21 @@ public class ListeningActivity extends AppCompatActivity {
         cardView.setVisibility(View.GONE);
     }
 
+    private void startTheGame() {
+        activateGameLayout();
+
+        playTheGame();
+    }
+
+    private void pauseTheGame() {
+        deactivateGameLayout();
+        game.pause();
+    }
+
     private void stopTheGame() {
         pauseTheGame();
+        game.cancel(true);
+        game = new Game();
         round = 0;
         score = 0;
         isPlaying = false;
@@ -254,5 +279,133 @@ public class ListeningActivity extends AppCompatActivity {
         }
 
         super.onResume();
+    }
+
+    /**********************************************************************************************
+     * Game class                                                                                 *
+     **********************************************************************************************/
+
+    private class Game extends AsyncTask<Void, Void, String> {
+        protected boolean isPaused = false;
+        protected int round = 1;
+        protected int score = 0;
+
+        private String leaderboardKey = "CgkIgozg9vQREAIQAQ";
+
+        volatile int a = 0;
+
+        protected List<Integer> hearedNumbers = new ArrayList<>();
+
+        public void submitAnswer(int number){
+            hearedNumbers.add(number);
+            Log.v("Answering", "The answer " + number + " has being added to hearedNumbers");
+        }
+
+        protected void playRound(){
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    List<Integer> playedNumbers = new ArrayList<>(); // the max amount of numbers is 8 so we should do fine
+                    // set array of answered numbers
+                    hearedNumbers = new ArrayList<>();
+
+                    while(a < 5){
+                        while (isPaused)
+                            sleep(1);
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        a++;
+                    }
+
+                    Log.e("round", "answer time enabled");
+                    try {
+                        Thread.sleep(8000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (!checkMistakeMade(playedNumbers, hearedNumbers)){
+                        score++;
+                    }
+                    Log.e("round", "ended round: " + round);
+                    a = 0;
+                }
+            });
+
+            t.start();
+
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            activateGameLayout();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            while (round < 24 && !isPaused){
+                playRound();
+                round++;
+            }
+
+            /* INACTIVE UNTIL COMPLETION OF ASSIGNMENT
+            final GoogleApiClient apiClient = ApiClient.getInstance().getApiClient();
+            if (apiClient.isConnected()){
+                Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, score);
+                Log.e("Leaderboards", "Added score of " + score + " in case 1");
+            } else {
+                final int fscore = score;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        apiClient.connect();
+                        while (apiClient.isConnecting()){
+                            // wait;
+                        }
+                        Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, fscore);
+                        Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
+                    }
+                }).start();
+
+            }*/
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String aString){
+            deactivateGameLayout();
+            stopTheGame();
+        }
+
+        protected void pause()
+        {
+            this.isPaused = true;
+            deactivateGameLayout();
+        }
+
+        protected void resume()
+        {
+            this.isPaused = false;
+            activateGameLayout();
+        }
+
+        private void sleep(long sleepDuration){
+            try {
+                Thread.sleep(sleepDuration);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
