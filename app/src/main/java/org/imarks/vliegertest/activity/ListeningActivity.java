@@ -49,7 +49,7 @@ public class ListeningActivity extends AppCompatActivity {
     private boolean reachedLimit = false;
 
     private SharedPreferences settings;
-    private String lang = "en";
+    private volatile String lang = "en";
 
     private CardView cardView;
 
@@ -244,15 +244,22 @@ public class ListeningActivity extends AppCompatActivity {
         List<Integer> sounds = new ArrayList<>();
         Resources res = getResources();
 
-        for (int i = 0; i < numbers.length() - 1; i++){
-            sounds.add(res.getIdentifier(lang + numbers.charAt(i), "raw", getApplicationContext().getPackageName()));
+        sounds.add(res.getIdentifier("left", "raw", getApplicationContext().getPackageName()));
+        sounds.add(res.getIdentifier("right", "raw", getApplicationContext().getPackageName()));
+        sounds.add(res.getIdentifier("links", "raw", getApplicationContext().getPackageName()));
+        sounds.add(res.getIdentifier("rechts", "raw", getApplicationContext().getPackageName()));
+
+        String[] supportedLangs = { "en", "nl"};
+        for (String ilang : supportedLangs){
+            for (int i = 0; i < numbers.length() - 1; i++){
+                sounds.add(res.getIdentifier(ilang + numbers.charAt(i), "raw", getApplicationContext().getPackageName()));
+            }
+
+            for (int i = 0; i < alphabet.length() - 1; i++){
+                sounds.add(res.getIdentifier(alphabet.charAt(i) + ilang, "raw", getApplicationContext().getPackageName()));
+            }
         }
 
-        for (int i = 0; i < alphabet.length() - 1; i++){
-            sounds.add(res.getIdentifier(alphabet.charAt(i) + lang, "raw", getApplicationContext().getPackageName()));
-        }
-
-        //Log.e("Sounds", sounds.toString());
         soundPool.setSounds(sounds);
         try {
             soundPool.InitializeSoundPool(this, new ISoundPoolLoaded() {
@@ -324,6 +331,7 @@ public class ListeningActivity extends AppCompatActivity {
     public void onStop() {
         isPlaying = false;
         stopTheGame();
+        game = new Game();
 
         super.onStop();
     }
@@ -365,6 +373,25 @@ public class ListeningActivity extends AppCompatActivity {
                     hearedNumbers = new ArrayList<>();
                     int roundSize = r.nextInt((8 - 5) + 1) + 5; // Get a number in the range of 5 and 8 (inclusive)
                     boolean isLeft = r.nextBoolean();
+                    Resources res = getResources();
+
+                    int beep;
+                    if (lang.equalsIgnoreCase("en")){
+                        if (isLeft){
+                            beep = res.getIdentifier("left", "raw", getApplicationContext().getPackageName());
+                        } else {
+                            beep = res.getIdentifier("right", "raw", getApplicationContext().getPackageName());
+                        }
+                    } else {
+                        if (isLeft){
+                            beep = res.getIdentifier("links", "raw", getApplicationContext().getPackageName());
+                        } else {
+                            beep = res.getIdentifier("rechts", "raw", getApplicationContext().getPackageName());
+                        }
+                    }
+
+                    soundPool.playSound(beep);
+                    sleep(3000);
 
                     while(playedNumbers.size() < roundSize){
                         while (isPaused)
@@ -376,9 +403,11 @@ public class ListeningActivity extends AppCompatActivity {
                         int soundRight = rightSoundData.first;
 
                         if (isLeft && Character.isDigit(leftSoundData.second.charAt(0))){
-                            hearedNumbers.add(Integer.parseInt(leftSoundData.second));
+                            playedNumbers.add(Integer.parseInt(leftSoundData.second));
+                            Log.e("playedNumbers", playedNumbers.toString());
                         } else if (!isLeft && Character.isDigit(rightSoundData.second.charAt(0))) {
-                            hearedNumbers.add(Integer.parseInt(leftSoundData.second));
+                            playedNumbers.add(Integer.parseInt(rightSoundData.second));
+                            Log.e("playedNumbers", playedNumbers.toString());
                         }
 
                         soundPool.playSound(soundLeft, .99f, .0f);
@@ -419,7 +448,6 @@ public class ListeningActivity extends AppCompatActivity {
                 round++;
             }
 
-            /* INACTIVE UNTIL COMPLETION OF ASSIGNMENT
             final GoogleApiClient apiClient = ApiClient.getInstance().getApiClient();
             if (apiClient.isConnected()){
                 Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, score);
@@ -437,8 +465,7 @@ public class ListeningActivity extends AppCompatActivity {
                         Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
                     }
                 }).start();
-
-            }*/
+            }
 
             return null;
         }

@@ -45,7 +45,7 @@ public class SoundPoolManager {
         if (sounds == null || sounds.size() == 0) {
             throw new Exception("Sounds not set");
         }
-        soundPool = new SoundPool(36, AudioManager.STREAM_MUSIC, 100);
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId,
