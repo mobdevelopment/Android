@@ -449,23 +449,22 @@ public class ListeningActivity extends AppCompatActivity {
             }
 
             final GoogleApiClient apiClient = ApiClient.getInstance().getApiClient();
-            if (apiClient.isConnected()){
-                Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, score);
-                Log.e("Leaderboards", "Added score of " + score + " in case 1");
-            } else {
-                final int fscore = score;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        apiClient.connect();
-                        while (apiClient.isConnecting()){
-                            // wait;
-                        }
-                        Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, fscore);
-                        Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
+
+            if (!apiClient.isConnected())
+                apiClient.connect();
+
+            final int fscore = score;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    apiClient.connect();
+                    while (apiClient.isConnecting()){
+                        // wait;
                     }
-                }).start();
-            }
+                    Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, fscore);
+                    Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
+                }
+            }).start();
 
             return null;
         }

@@ -3,11 +3,6 @@ package org.imarks.vliegertest.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.model.ApiClient;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,11 +25,18 @@ public class InstrumentScoreFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        mGoogleApiClient.connect();
+        if (!mGoogleApiClient.isConnected())
+            mGoogleApiClient.connect();
 
-        if (mGoogleApiClient.isConnected()){
-            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, "CgkIgozg9vQREAIQAg"), 1337);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mGoogleApiClient.isConnecting()){
+                    // wait;
+                }
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, "CgkIgozg9vQREAIQAg"), 1337);
+            }
+        }).start();
     }
 
     @Override
@@ -53,14 +55,20 @@ public class InstrumentScoreFragment extends Fragment {
     public void onAttach(Context context){
         super.onAttach(context);
 
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, "CgkIgozg9vQREAIQAg"), 1337);
-        }
-    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!mGoogleApiClient.isConnected())
+                    mGoogleApiClient.connect();
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_instrument_score, container, false);
+                while (mGoogleApiClient.isConnecting()){
+                    // wait;
+                }
+
+                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                    startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, "CgkIgozg9vQREAIQAg"), 1337);
+                }
+            }
+        }).start();
     }
 }
