@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cv"
+        android:elevation="2dp"
+        android:backgroundTintMode="multiply"
+        android:backgroundTint="#FFFF0000">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/instrumentsCard"
+                android:layout_gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardBackgroundColor="@color/textAlternative">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_weight="1"
+                        android:id="@+id/altitude"
+                        android:src="@drawable/altitude"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_weight="1"
+                        android:id="@+id/compass"
+                        android:src="@drawable/compass"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/backgroundAlternative"
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/textAlternative">
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="90dp"
+                            android:id="@+id/image1"
+                            android:src="@drawable/a"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:alpha="0.8"
+                            android:background="#000000"
+                            android:padding="4dp"
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Correcte antwoord"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"/>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/textAlternative">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="90dp"
+                            android:id="@+id/image2"
+                            android:src="@drawable/b"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:alpha="0.8"
+                                android:background="#000000"
+                                android:padding="4dp"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Gegeven antwoord"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="11sp"/>
+
+                            </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
