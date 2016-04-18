@@ -278,12 +278,11 @@ public class InstrumentActivity extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             ViewGroup.LayoutParams params = bmImage.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = 360;
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            bmImage.setImageBitmap(result);
+            bmImage.setImageBitmap(Bitmap.createScaledBitmap(result, 360, 360, false));
             bmImage.setLayoutParams(params);
-            bmImage.setAdjustViewBounds(true);
-            bmImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            bmImage.requestLayout();
         }
     }
 }
