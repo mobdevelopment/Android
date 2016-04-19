@@ -1,5 +1,6 @@
 package org.imarks.vliegertest.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import com.google.gson.GsonBuilder;
 
 import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.model.ApiClient;
+import org.imarks.vliegertest.model.InstrumentScore;
 import org.imarks.vliegertest.model.Question;
 
 import java.io.BufferedReader;
@@ -40,6 +42,7 @@ import java.util.Random;
 public class InstrumentActivity extends AppCompatActivity {
 
     private List<Question> questions;
+    private ArrayList<InstrumentScore> history = new ArrayList<InstrumentScore>();
     private Question current;
 
     private ImageView altitude, compass, optionA, optionB, optionC, optionD;
@@ -143,6 +146,17 @@ public class InstrumentActivity extends AppCompatActivity {
     public void next(View v) {
         int index = questions.indexOf(current);
         Log.e("Navigation", "Index: " + index + " Size: " + questions.size());
+
+        if (current.answer > 0){
+            InstrumentScore score = new InstrumentScore();
+            score.altitude = current.altitude;
+            score.compass = current.compass;
+            score.correct = current.images.get(0);
+            score.given = current.images.get(1);
+            score.isCorrect = current.images.get(current.answer - 1).correct;
+            history.add(score);
+        }
+
         if (index < questions.size() - 1 && current.answer > 0){
             Question next = questions.get(index + 1);
             changeImages(next);
@@ -166,7 +180,6 @@ public class InstrumentActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                apiClient.connect();
                 while (apiClient.isConnecting()){
                     // wait;
                 }
@@ -174,6 +187,10 @@ public class InstrumentActivity extends AppCompatActivity {
                 Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
             }
         }).start();
+
+        Intent intent = new Intent(this, InstrumentScoreActivity.class);
+        intent.putExtra("ScoreList", history);
+        startActivity(intent);
     }
 
     private void changeImages(Question question){

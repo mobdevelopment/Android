@@ -31,7 +31,7 @@ public class HighscoreActivity extends AppCompatActivity {
                 new BottomBarFragment(ListeningScoreFragment.newInstance(), R.drawable.ic_media_play, "Luistertest")
         );
 
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

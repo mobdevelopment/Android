@@ -24,4 +24,7 @@
     <color name="textAlternative">#fff</color>
     <color name="textHover">#fe6600</color>
     <color name="label">#fe6600</color>
+
+    <color name="correct">#FF00FF00</color>
+    <color name="incorrect">#FFFF0000</color>
 </resources>
