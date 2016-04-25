@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.imarks.vliegertest.DownloadImageTask;
 import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.model.InstrumentScore;
 
@@ -40,6 +41,10 @@ public class ISRVAdapter extends RecyclerView.Adapter<ISRVAdapter.ScoreViewHolde
     public void onBindViewHolder(ScoreViewHolder holder, int i) {
         Resources res = context.getResources();
         holder.cv.getBackground().setColorFilter(res.getColor(instrumentScore.get(i).isCorrect ? R.color.correct : R.color.incorrect), PorterDuff.Mode.SRC_IN);
+        new DownloadImageTask(holder.altitude).execute(instrumentScore.get(i).altitude.path);
+        new DownloadImageTask(holder.compass).execute(instrumentScore.get(i).compass.path);
+        new DownloadImageTask(holder.correctImage).execute(instrumentScore.get(i).correct.path);
+        new DownloadImageTask(holder.givenImage).execute(instrumentScore.get(i).given.path);
     }
 
     @Override

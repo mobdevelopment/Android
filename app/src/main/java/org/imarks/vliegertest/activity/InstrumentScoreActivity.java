@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.adapter.ISRVAdapter;
@@ -32,6 +33,17 @@ public class InstrumentScoreActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ArrayList<InstrumentScore> questions = (ArrayList<InstrumentScore>) intent.getSerializableExtra("ScoreList");
+
+        TextView score      = (TextView) findViewById(R.id.score);
+        TextView maxScore   = (TextView) findViewById(R.id.maxScore);
+
+        int iscore = 0;
+        for (InstrumentScore question : questions ) {
+            if (question.isCorrect) iscore++;
+        }
+
+        score.setText("" + iscore);
+        maxScore.setText("" + questions.size());
 
         ISRVAdapter adapter = new ISRVAdapter(this, questions);
         rv.setAdapter(adapter);

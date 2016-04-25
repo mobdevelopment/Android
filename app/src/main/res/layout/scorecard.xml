@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="U behaalde score:"
-                android:textSize="42dp"
+                android:textSize="32dp"
                 android:textAlignment="center"/>
 
             <LinearLayout
@@ -34,20 +34,20 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:id="@+id/score"
-                    android:textSize="48dp"/>
+                    android:textSize="24dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
-                    android:textSize="48dp"/>
+                    android:textSize="24dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:id="@+id/maxScore"
-                    android:textSize="48dp"/>
+                    android:textSize="24dp"/>
 
             </LinearLayout>
         </LinearLayout>

@@ -22,8 +22,10 @@ import com.google.android.gms.games.Games;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.imarks.vliegertest.DownloadImageTask;
 import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.model.ApiClient;
+import org.imarks.vliegertest.model.Image;
 import org.imarks.vliegertest.model.InstrumentScore;
 import org.imarks.vliegertest.model.Question;
 
@@ -142,6 +144,14 @@ public class InstrumentActivity extends AppCompatActivity {
         }
     }
 
+    private Image findCorrect(){
+        for (Image image: current.images) {
+            if (image.correct) {
+                return image;
+            }
+        }
+        return null;
+    }
 
     public void next(View v) {
         int index = questions.indexOf(current);
@@ -151,10 +161,14 @@ public class InstrumentActivity extends AppCompatActivity {
             InstrumentScore score = new InstrumentScore();
             score.altitude = current.altitude;
             score.compass = current.compass;
-            score.correct = current.images.get(0);
-            score.given = current.images.get(1);
+            score.correct = findCorrect();
+            score.given = current.images.get(current.answer - 1);
             score.isCorrect = current.images.get(current.answer - 1).correct;
-            history.add(score);
+            if (history.size() <= index){
+                history.add(score);
+            } else {
+                history.set(index, score);
+            }
         }
 
         if (index < questions.size() - 1 && current.answer > 0){
@@ -173,13 +187,13 @@ public class InstrumentActivity extends AppCompatActivity {
             }
         }
 
-        if (!apiClient.isConnected())
-            apiClient.connect();
-
         final int fscore = score;
         new Thread(new Runnable() {
             @Override
             public void run() {
+                if (!apiClient.isConnected())
+                    apiClient.connect();
+
                 while (apiClient.isConnecting()){
                     // wait;
                 }
@@ -269,37 +283,6 @@ public class InstrumentActivity extends AppCompatActivity {
                 Log.e(TAG, "Failed to send HTTP GET request ");
             }
             return null;
-        }
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon = null;
-            try {
-                InputStream inputStream = new URL(urldisplay).openStream();
-                mIcon = BitmapFactory.decodeStream(inputStream);
-            } catch (Exception e) {
-                Log.e("Image Download", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            ViewGroup.LayoutParams params = bmImage.getLayoutParams();
-            params.height = 360;
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            bmImage.setImageBitmap(Bitmap.createScaledBitmap(result, 360, 360, false));
-            bmImage.setLayoutParams(params);
-            bmImage.requestLayout();
         }
     }
 }
