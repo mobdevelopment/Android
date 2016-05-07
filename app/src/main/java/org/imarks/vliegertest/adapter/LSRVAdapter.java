@@ -64,7 +64,7 @@ public class LSRVAdapter extends RecyclerView.Adapter<LSRVAdapter.ScoreViewHolde
 
         ScoreViewHolder(View itemView){
             super(itemView);
-            lcv              = (CardView) itemView.findViewById(R.id.lcv);
+            lcv             = (CardView) itemView.findViewById(R.id.lcv);
             played          = (TextView) itemView.findViewById(R.id.played);
             heared          = (TextView) itemView.findViewById(R.id.heared);
         }

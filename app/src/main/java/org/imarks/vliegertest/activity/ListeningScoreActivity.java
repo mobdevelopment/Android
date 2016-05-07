@@ -25,7 +25,7 @@ public class ListeningScoreActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
+        RecyclerView rv = (RecyclerView) findViewById(R.id.lrv);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
