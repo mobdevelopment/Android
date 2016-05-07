@@ -1,5 +1,6 @@
 package org.imarks.vliegertest.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import org.imarks.vliegertest.R;
 import org.imarks.vliegertest.adapter.SoundPoolManager;
 import org.imarks.vliegertest.adapter.interfaces.ISoundPoolLoaded;
 import org.imarks.vliegertest.model.ApiClient;
+import org.imarks.vliegertest.model.ListeningScore;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -184,34 +186,12 @@ public class ListeningActivity extends AppCompatActivity {
 
     private static boolean checkMistakeMade(List<Integer> played, List<Integer> heared) {
         if (played.size() != heared.size()){
-            return false;
+            return true; // if the length is different a mistake is made, so return true (indicating that a mistake is made)
         }
 
         Collections.sort(played);
         Collections.sort(heared);
         return !played.equals(heared); // If the array is the same no mistake is made, so revert the answer
-    }
-
-    private void playSoundLeft(int id){
-        playSound(1, 0, id);
-    }
-
-    private void playSoundRight(int id){
-        playSound(0, 1, id);
-    }
-
-    private void playSound(int left, int right, int resource){
-        MediaPlayer player = MediaPlayer.create(this, resource);
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        player.setVolume(left, right);
-        player.start();
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-                mp.reset();
-                //mp.stop();
-            }
-        });
     }
 
     public void giveNumber(View v){
@@ -351,16 +331,38 @@ public class ListeningActivity extends AppCompatActivity {
 
     private class Game extends AsyncTask<Void, Void, String> {
         protected boolean isPaused = false;
-        protected int round = 1;
+        protected int round = 0;
         protected int score = 0;
 
         private String leaderboardKey = "CgkIgozg9vQREAIQAQ";
 
         protected List<Integer> hearedNumbers = new ArrayList<>();
+        private ArrayList<ListeningScore> scoreList = new ArrayList<>();
 
         public void submitAnswer(int number){
             hearedNumbers.add(number);
             Log.v("Answering", "The answer " + number + " has being added to hearedNumbers");
+        }
+
+        public void submitScore()
+        {
+            final GoogleApiClient apiClient = ApiClient.getInstance().getApiClient();
+
+            if (!apiClient.isConnected())
+                apiClient.connect();
+
+            final int fscore = score;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    apiClient.connect();
+                    while (apiClient.isConnecting()){
+                        // wait;
+                    }
+                    Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, fscore);
+                    Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
+                }
+            }).start();
         }
 
         protected void playRound(){
@@ -423,6 +425,13 @@ public class ListeningActivity extends AppCompatActivity {
                     if (!checkMistakeMade(playedNumbers, hearedNumbers)){
                         score++;
                     }
+
+                    ListeningScore ls = new ListeningScore();
+                    ls.heared = hearedNumbers;
+                    ls.played = playedNumbers;
+                    ls.isCorrect = !checkMistakeMade(playedNumbers, hearedNumbers);
+                    scoreList.add(ls);
+
                     Log.e("round", "ended round: " + round);
                 }
             });
@@ -443,28 +452,10 @@ public class ListeningActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            while (round < 24 && !isPaused){
+            while (round != 3 && !isPaused){
                 playRound();
                 round++;
             }
-
-            final GoogleApiClient apiClient = ApiClient.getInstance().getApiClient();
-
-            if (!apiClient.isConnected())
-                apiClient.connect();
-
-            final int fscore = score;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    apiClient.connect();
-                    while (apiClient.isConnecting()){
-                        // wait;
-                    }
-                    Games.Leaderboards.submitScore(ApiClient.getInstance().getApiClient(), leaderboardKey, fscore);
-                    Log.e("Leaderboards", "Added score of " + fscore + " in case 2");
-                }
-            }).start();
 
             return null;
         }
@@ -473,6 +464,10 @@ public class ListeningActivity extends AppCompatActivity {
         protected void onPostExecute(String aString){
             deactivateGameLayout();
             stopTheGame();
+
+            Intent intent = new Intent(getApplicationContext(), ListeningScoreActivity.class);
+            intent.putExtra("ScoreList", scoreList);
+            startActivity(intent);
         }
 
         protected void pause()

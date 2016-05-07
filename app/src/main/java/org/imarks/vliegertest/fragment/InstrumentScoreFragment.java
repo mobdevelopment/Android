@@ -66,6 +66,7 @@ public class InstrumentScoreFragment extends Fragment {
                 }
 
                 if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                    //Games.Leaderboards.get
                     startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, "CgkIgozg9vQREAIQAg"), 1337);
                 }
             }

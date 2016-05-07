@@ -73,6 +73,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.imarks.vliegertest.activity.DashboardActivity" />
         </activity>
+
+        <activity
+            android:name=".activity.ListeningScoreActivity"
+            android:label="@string/title_activity_listening_score"
+            android:parentActivityName=".activity.DashboardActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.imarks.vliegertest.activity.DashboardActivity" />
+        </activity>
     </application>
 
 </manifest>
